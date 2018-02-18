@@ -92,8 +92,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChapTokenProvider.cs" />
-    <Compile Include="IChapTokenProvider.cs" />
+    <Compile Include="Security\ChapTokenProvider.cs" />
+    <Compile Include="Security\ChapValidatedResult.cs" />
+    <Compile Include="Security\IChapTokenProvider.cs" />
+    <Compile Include="Security\IChapValidationResult.cs" />
     <Compile Include="Pipelines\RegisterRoutes.cs" />
     <Compile Include="RegisterServices.cs" />
     <Compile Include="Mvc\ChapAuthenticationController.cs" />

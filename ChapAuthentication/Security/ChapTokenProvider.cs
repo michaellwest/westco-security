@@ -1,26 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
 using System.Web;
 using MicroCHAP;
 using MicroCHAP.Server;
+using Sitecore.Configuration;
 using Sitecore.Exceptions;
-using Sitecore.Services.Infrastructure.Sitecore.Security;
-using Sitecore.Services.Infrastructure.Web.Http.Security;
 
-namespace Westco.Services.Infrastructure
+namespace Westco.Services.Infrastructure.Security
 {
     internal class ChapTokenProvider : IChapTokenProvider
     {
         private static IChapServer _server;
         private static ISignatureService _signatureService;
 
-        private readonly string _challengeDatabase = Sitecore.Configuration.Settings.GetSetting("Westco.Services.Infrastructure.ChapTokenProvider.ChallengeDatabase");
+        private readonly string _challengeDatabase =
+            Settings.GetSetting("Westco.Services.Infrastructure.Security.ChapTokenProvider.ChallengeDatabase");
 
-        private string _sharedSecret = Sitecore.Configuration.Settings.GetSetting("Westco.Services.Infrastructure.ChapTokenProvider.SharedSecret");
+        private string _sharedSecret =
+            Settings.GetSetting("Westco.Services.Infrastructure.Security.ChapTokenProvider.SharedSecret");
+
+        private readonly string _apiUser =
+            Settings.GetSetting("Westco.Services.Infrastructure.Security.ChapTokenProvider.ApiUser");
 
         protected virtual IChapServer Server => _server ?? (_server = new ChapServer(SignatureService, ChallengeStore));
 
@@ -41,9 +41,13 @@ namespace Westco.Services.Infrastructure
 
         protected virtual int RequestTimeoutInMs => 1000 * 60 * 120; // 2h in msec
 
-        public bool ValidateRequest(HttpRequestBase request)
+        public IChapValidationResult ValidateRequest(HttpRequestBase request)
         {
-            return Server.ValidateRequest(request);
+            return new ChapValidatedResult
+            {
+                ApiUser = _apiUser,
+                IsValid = Server.ValidateRequest(request)
+            };
         }
 
         public string GenerateChallenge()
@@ -59,11 +63,8 @@ namespace Westco.Services.Infrastructure
                     "The shared secret is not set.");
 
             if (double.TryParse(_sharedSecret, out _))
-            {
-                // if no shared secret is set we make it a random double, but we reject that once you actually try to authenticate with a tool
                 throw new SecurityException(
                     "The shared secret is not set, or was set to a numeric value.");
-            }
 
             if (_sharedSecret.Length < 30)
                 throw new SecurityException(

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Web.Mvc;
+using Westco.Services.Infrastructure.Security;
 
 namespace Westco.Services.Infrastructure.Mvc
 {

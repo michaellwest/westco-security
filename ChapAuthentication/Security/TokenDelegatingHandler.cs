@@ -40,23 +40,26 @@ namespace Westco.Services.Infrastructure.Security
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            AttemptLoginWithToken(request);
+            AttemptLogin();
             return await base.SendAsync(request, cancellationToken);
         }
 
-        private void AttemptLoginWithToken(HttpRequestMessage request)
+        private void AttemptLogin()
         {
-            if (!request.Headers.Contains("token")) return;
-
             var context = new HttpContextWrapper(HttpContext.Current);
             var requestBase = context.Request;
-            if (!_tokenProvider.ValidateRequest(requestBase)) return;
+            var validatedResult = _tokenProvider.ValidateRequest(requestBase);
+            if (!validatedResult.IsValid) return;
 
-            var username = "sitecore\admin";
+            var username = validatedResult.ApiUser;
             if (_userService is IUserServiceEx userService)
+            {
                 userService.SwitchToUser(username, true);
+            }
             else
+            {
                 _userService.SwitchToUser(username);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sitecore.DependencyInjection;
+using Westco.Services.Infrastructure.Security;
 
 namespace Westco.Services.Infrastructure
 {
