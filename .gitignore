@@ -3,6 +3,5 @@ packages/
 
 \.vs/
 
-ChapAuthentication/bin/
-
-ChapAuthentication/obj/
+bin/
+obj/
