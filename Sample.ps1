@@ -1,6 +1,10 @@
 ﻿$ErrorActionPreference = 'Stop'
 $ScriptPath = Split-Path $MyInvocation.MyCommand.Path
 $MicroCHAP = $ScriptPath + '\MicroCHAP.dll'
+if(-not(Test-Path -Path $MicroCHAP)) {
+    $MicroCHAP = Get-ChildItem -Path $ScriptPath -Filter "MicroCHAP.dll" | Select-Object -First 1 -ExpandProperty FullName
+}
+
 Add-Type -Path $MicroCHAP
 
 function Get-Challenge {
@@ -27,7 +31,7 @@ function Get-Result {
 
     $signatureService = New-Object MicroCHAP.SignatureService -ArgumentList $SharedSecret
     $signature = $signatureService.CreateSignature($challenge, $query, $null)
-    $result = Invoke-WebRequest -Uri $query -Headers @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; "token" = "jjj" } -TimeoutSec 10800 -UseBasicParsing
+    $result = Invoke-WebRequest -Uri $query -Headers @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; } -TimeoutSec 10800 -UseBasicParsing
 
     $result.Content
 }
