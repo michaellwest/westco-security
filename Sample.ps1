@@ -9,11 +9,11 @@ function Get-Challenge {
 		[string]$InstanceUrl
 	)
 
-	$url = "$($InstanceUrl)/sitecore/api/westco/auth/challengetoken"
+	$url = "$($InstanceUrl)/sitecore/api/westco/auth/challenge"
 
-	$result = Invoke-WebRequest -Uri $url -TimeoutSec 360 -UseBasicParsing -Method Post
+	$result = Invoke-WebRequest -Uri $url -TimeoutSec 360 -UseBasicParsing
 
-	$result.Content | ConvertFrom-Json | Select-Object -ExpandProperty token
+	$result.Content | ConvertFrom-Json | Select-Object -ExpandProperty challenge
 }
 
 function Get-Result {
@@ -32,7 +32,7 @@ function Get-Result {
     $result.Content
 }
 
-$instanceUrl = "http://sc82u5.local"
+$instanceUrl = "https://sc82u5.dev.local"
 $sharedSecret = "cpfwrKUUcefNam36zwZQpmjk2342342342342432342fsgfsgd"
 
 $challenge = Get-Challenge -InstanceUrl $instanceUrl

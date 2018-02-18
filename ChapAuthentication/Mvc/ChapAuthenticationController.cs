@@ -1,44 +1,33 @@
 ﻿using System.Net;
-using System.Security.Claims;
 using System.Web.Mvc;
-using Sitecore;
-using Sitecore.Services.Core.Security;
-using Sitecore.Services.Infrastructure.Sitecore.Security;
-using Sitecore.Services.Infrastructure.Web.Http.Security;
 
 namespace Westco.Services.Infrastructure.Mvc
 {
     public class ChapAuthenticationController : Controller
     {
-        private readonly ITokenProvider _tokenProvider;
-        private readonly IUserService _userService;
+        private readonly IChapTokenProvider _tokenProvider;
 
         public ChapAuthenticationController()
-            : this(new UserService(), new ChapTokenProvider())
+            : this(new ChapTokenProvider())
         {
         }
 
-        public ChapAuthenticationController(IUserService userService, ITokenProvider tokenProvider)
+        public ChapAuthenticationController(IChapTokenProvider tokenProvider)
         {
-            _userService = userService;
             _tokenProvider = tokenProvider;
         }
 
-        [HttpPost]
+        [HttpGet]
         //[RequireHttps]
-        public ActionResult ChallengeToken()
+        public ActionResult Challenge()
         {
-            _userService.Login("sitecore", "admin", "b");
-            var token = _tokenProvider.GenerateToken(new Claim[1]
-            {
-                new Claim("User", Context.User.Name)
-            });
-            if (token == null)
+            var challenge = _tokenProvider.GenerateChallenge();
+            if (challenge == null)
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             Response.StatusCode = 200;
             return new JsonResult
             {
-                Data = new {token}
+                Data = new {challenge}, JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
     }

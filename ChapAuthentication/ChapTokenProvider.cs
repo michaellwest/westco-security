@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Web;
 using MicroCHAP;
 using MicroCHAP.Server;
 using Sitecore.Exceptions;
@@ -12,7 +13,7 @@ using Sitecore.Services.Infrastructure.Web.Http.Security;
 
 namespace Westco.Services.Infrastructure
 {
-    internal class ChapTokenProvider : ITokenProvider
+    internal class ChapTokenProvider : IChapTokenProvider
     {
         private static IChapServer _server;
         private static ISignatureService _signatureService;
@@ -40,40 +41,18 @@ namespace Westco.Services.Infrastructure
 
         protected virtual int RequestTimeoutInMs => 1000 * 60 * 120; // 2h in msec
 
-        public string GenerateToken(IEnumerable<Claim> claims)
+        public bool ValidateRequest(HttpRequestBase request)
         {
-            return GetChallengeToken();
+            return Server.ValidateRequest(request);
         }
 
-        public ITokenValidationResult ValidateToken(string token)
-        {
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                ValidateSharedSecret();
-
-                return new ValidatedToken
-                {
-                    Claims = new Claim[1]
-                    {
-                        new Claim("User", "sitecore\admin")
-                    },
-                    IsValid = true
-                };
-            }
-
-            return new ValidatedToken
-            {
-                IsValid = false
-            };
-        }
-
-        protected string GetChallengeToken()
+        public string GenerateChallenge()
         {
             ValidateSharedSecret();
             return Server.GetChallengeToken();
         }
 
-        protected virtual void ValidateSharedSecret()
+        public virtual void ValidateSharedSecret()
         {
             if (string.IsNullOrWhiteSpace(_sharedSecret))
                 throw new SecurityException(

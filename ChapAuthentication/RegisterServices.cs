@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sitecore.DependencyInjection;
-using Sitecore.Services.Infrastructure.Web.Http.Security;
 
 namespace Westco.Services.Infrastructure
 {
@@ -8,7 +7,7 @@ namespace Westco.Services.Infrastructure
     {
         public void Configure(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<ITokenProvider, ChapTokenProvider>();
+            serviceCollection.AddScoped<IChapTokenProvider, ChapTokenProvider>();
         }
     }
 }

@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChapTokenProvider.cs" />
+    <Compile Include="IChapTokenProvider.cs" />
     <Compile Include="Pipelines\RegisterRoutes.cs" />
     <Compile Include="RegisterServices.cs" />
     <Compile Include="Mvc\ChapAuthenticationController.cs" />
