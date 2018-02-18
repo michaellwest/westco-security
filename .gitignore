@@ -1,0 +1,8 @@
+
+packages/
+
+\.vs/
+
+ChapAuthentication/bin/
+
+ChapAuthentication/obj/
