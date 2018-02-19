@@ -7,31 +7,48 @@ if(-not(Test-Path -Path $MicroCHAP)) {
 
 Add-Type -Path $MicroCHAP
 
-function Get-Challenge {
+function Get-SscChallenge {
 	param(
 		[Parameter(Mandatory=$true)]
 		[string]$InstanceUrl
 	)
 
-	$url = "$($InstanceUrl)/sitecore/api/westco/auth/challenge"
+	$url = "$($InstanceUrl)/sitecore/api/ssc/chapauth/challenge"
 
 	$result = Invoke-WebRequest -Uri $url -TimeoutSec 360 -UseBasicParsing
 
 	$result.Content | ConvertFrom-Json | Select-Object -ExpandProperty challenge
 }
 
-function Get-Result {
+function Get-SscResult {
 	param(
 		[Parameter(Mandatory=$true)]
-		[string]$ApiUrl,
+		[string]$Url,
 
         [Parameter(Mandatory=$true)]
         [string]$Challenge
 	)
 
     $signatureService = New-Object MicroCHAP.SignatureService -ArgumentList $SharedSecret
-    $signature = $signatureService.CreateSignature($challenge, $query, $null)
-    $result = Invoke-WebRequest -Uri $query -Headers @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; } -TimeoutSec 10800 -UseBasicParsing
+    $signature = $signatureService.CreateSignature($challenge, $Url, $null)
+    $headers = @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; }
+    $result = Invoke-WebRequest -Uri $Url -Headers $headers -TimeoutSec 10800 -UseBasicParsing
+
+    $result.Content
+}
+
+function Invoke-SscRequest {
+    param(
+        [string]$Url,
+        [string]$Challenge,
+        [string]$Payload,
+        [string]$ContentType = "application/json"
+    )
+
+    $signatureService = New-Object MicroCHAP.SignatureService -ArgumentList $SharedSecret
+    $signature = $signatureService.CreateSignature($challenge, $Url, $null)
+    $headers = @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; }
+    $result = Invoke-WebRequest -Uri $Url -Headers $headers -Body $Payload -ContentType $ContentType -TimeoutSec 10800 -UseBasicParsing -Method Post
 
     $result.Content
 }

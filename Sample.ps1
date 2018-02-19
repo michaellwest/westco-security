@@ -1,44 +1,35 @@
-﻿$ErrorActionPreference = 'Stop'
-$ScriptPath = Split-Path $MyInvocation.MyCommand.Path
-$MicroCHAP = $ScriptPath + '\MicroCHAP.dll'
-if(-not(Test-Path -Path $MicroCHAP)) {
-    $MicroCHAP = Get-ChildItem -Path $ScriptPath -Filter "MicroCHAP.dll" | Select-Object -First 1 -ExpandProperty FullName
-}
+﻿$publishPayload = @{
+    "ItemId" = ""
+    "IncludeDescendantItems" = $true
+    "IncludeRelatedItems" = $true
+    "Languages" = @(@{"Code" = "en"; "DisplayName" = "English"})
+    "Targets" = @(@{"Id" = "Internet"; "Name" = "Internet"})
+    "sourceDatabase" = "master"
+} | ConvertTo-Json
 
-Add-Type -Path $MicroCHAP
+$publishPayloadAll = @{
+    "ItemId" = "{11111111-1111-1111-1111-111111111111}"
+    "IncludeDescendantItems" = $true
+    "SyncWithTarget" = $false
+    "Languages" = @(@{"Code" = "en"; "DisplayName" = "English"})
+    "Targets" = @(@{"Id" = "Internet"; "Name" = "Internet"})
+    "sourceDatabase" = "master"
+    "metadata" = @{
+        "Publish.Options.ClearAllCaches" = $false
+        "Publish.Options.Republish" = $false
+    }
+} | ConvertTo-Json
 
-function Get-Challenge {
-	param(
-		[Parameter(Mandatory=$true)]
-		[string]$InstanceUrl
-	)
+$sharedSecret = "Patch-This-Value-With-Something-Other-Than-This"
 
-	$url = "$($InstanceUrl)/sitecore/api/westco/auth/challenge"
+$instanceUrl = "https://scms.dev.sc.local" # Replace with your site Url
 
-	$result = Invoke-WebRequest -Uri $url -TimeoutSec 360 -UseBasicParsing
+Write-Host "Publishing the site" -ForegroundColor Yellow
+$publishUrl = "$($instanceUrl)/sitecore/api/ssc/publishing/jobs/0/FullPublish"
+$challenge = Get-SscChallenge -InstanceUrl $instanceUrl
+Invoke-SscRequest -Url $publishUrl -Challenge $challenge -Payload $publishPayload | ConvertFrom-Json
 
-	$result.Content | ConvertFrom-Json | Select-Object -ExpandProperty challenge
-}
-
-function Get-Result {
-	param(
-		[Parameter(Mandatory=$true)]
-		[string]$ApiUrl,
-
-        [Parameter(Mandatory=$true)]
-        [string]$Challenge
-	)
-
-    $signatureService = New-Object MicroCHAP.SignatureService -ArgumentList $SharedSecret
-    $signature = $signatureService.CreateSignature($challenge, $query, $null)
-    $result = Invoke-WebRequest -Uri $query -Headers @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; } -TimeoutSec 10800 -UseBasicParsing
-
-    $result.Content
-}
-
-$instanceUrl = "https://sc82u5.dev.local"
-$sharedSecret = "cpfwrKUUcefNam36zwZQpmjk2342342342342432342fsgfsgd"
-
-$challenge = Get-Challenge -InstanceUrl $instanceUrl
+Write-Host "Getting the home item" -ForegroundColor Yellow
+$challenge = Get-SscChallenge -InstanceUrl $instanceUrl
 $query = $instanceUrl + "/sitecore/api/ssc/item/{110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9}"
-Get-Result -ApiUrl $query -Challenge $challenge
+Get-SscResult -Url $query -Challenge $challenge | ConvertFrom-Json

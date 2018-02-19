@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Sitecore.Security.Accounts;
 using Sitecore.Services.Core.Security;
 using Sitecore.Services.Infrastructure.Sitecore.Security;
 
@@ -52,7 +53,19 @@ namespace Westco.Services.Infrastructure.Security
             if (!validatedResult.IsValid) return;
 
             var username = validatedResult.ApiUser;
-            _userService.SwitchToUser(username);
+            // In this version of the Sitecore.Services.Core there is no option to login authenticated (1.3).
+            /*
+            if (_userService is IUserServiceEx userService) 
+            { 
+                userService.SwitchToUser(username, true); 
+            } 
+            else 
+            { 
+                _userService.SwitchToUser(username); 
+            }
+            */
+
+            var userSwitcher = new UserSwitcher(User.FromName(username, true));
         }
     }
 }

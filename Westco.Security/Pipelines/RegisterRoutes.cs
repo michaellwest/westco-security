@@ -8,7 +8,7 @@ namespace Westco.Services.Infrastructure.Pipelines
     {
         public void Process(PipelineArgs args)
         {
-            RouteTable.Routes.MapRoute("ChapAuthentication", "sitecore/api/westco/auth/{action}", new
+            RouteTable.Routes.MapRoute("ChapAuthentication", "sitecore/api/ssc/chapauth/{action}", new
             {
                 controller = "ChapAuthentication"
             }, new string[1]
