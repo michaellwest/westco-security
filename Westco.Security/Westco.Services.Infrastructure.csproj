@@ -107,6 +107,9 @@
     <Content Include="App_Config\Include\Westco.Services.Infrastructure\Westco.Services.Infrastructure.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="App_Config\Include\Westco.Services.Infrastructure\Westco.zSharedSecret.config.example">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
