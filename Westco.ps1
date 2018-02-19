@@ -26,6 +26,9 @@ function Get-SscResult {
 		[string]$Url,
 
         [Parameter(Mandatory=$true)]
+		[string]$SharedSecret,
+
+        [Parameter(Mandatory=$true)]
         [string]$Challenge
 	)
 
@@ -39,9 +42,17 @@ function Get-SscResult {
 
 function Invoke-SscRequest {
     param(
+        [Parameter(Mandatory=$true)]
         [string]$Url,
+
+        [Parameter(Mandatory=$true)]
+		[string]$SharedSecret,
+
+        [Parameter(Mandatory=$true)]
         [string]$Challenge,
+
         [string]$Payload,
+
         [string]$ContentType = "application/json"
     )
 
