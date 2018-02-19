@@ -52,14 +52,7 @@ namespace Westco.Services.Infrastructure.Security
             if (!validatedResult.IsValid) return;
 
             var username = validatedResult.ApiUser;
-            if (_userService is IUserServiceEx userService)
-            {
-                userService.SwitchToUser(username, true);
-            }
-            else
-            {
-                _userService.SwitchToUser(username);
-            }
+            _userService.SwitchToUser(username);
         }
     }
 }

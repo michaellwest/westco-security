@@ -43,16 +43,16 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sitecore.Kernel.NoReferences.8.2.170728\lib\NET452\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\packages\Sitecore.Kernel.NoReferences.8.2.170614\lib\NET452\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Services.Core, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sitecore.Services.Core.NoReferences.8.2.170728\lib\NET452\Sitecore.Services.Core.dll</HintPath>
+      <HintPath>..\packages\Sitecore.Services.Core.NoReferences.8.2.170614\lib\NET452\Sitecore.Services.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Services.Infrastructure, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sitecore.Services.Infrastructure.NoReferences.8.2.170728\lib\NET452\Sitecore.Services.Infrastructure.dll</HintPath>
+      <HintPath>..\packages\Sitecore.Services.Infrastructure.NoReferences.8.2.170614\lib\NET452\Sitecore.Services.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Services.Infrastructure.Sitecore, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sitecore.Services.Infrastructure.Sitecore.NoReferences.8.2.170728\lib\NET452\Sitecore.Services.Infrastructure.Sitecore.dll</HintPath>
+      <HintPath>..\packages\Sitecore.Services.Infrastructure.Sitecore.NoReferences.8.2.170614\lib\NET452\Sitecore.Services.Infrastructure.Sitecore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
