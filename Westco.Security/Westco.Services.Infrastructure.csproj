@@ -97,7 +97,7 @@
     <Compile Include="Security\IChapTokenProvider.cs" />
     <Compile Include="Security\IChapValidationResult.cs" />
     <Compile Include="Pipelines\RegisterRoutes.cs" />
-    <Compile Include="RegisterServices.cs" />
+    <Compile Include="Pipelines\IoC\RegisterServices.cs" />
     <Compile Include="Mvc\ChapAuthenticationController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SitecoreDatabaseChallengeStore.cs" />

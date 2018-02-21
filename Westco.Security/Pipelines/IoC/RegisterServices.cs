@@ -2,7 +2,7 @@
 using Sitecore.DependencyInjection;
 using Westco.Services.Infrastructure.Security;
 
-namespace Westco.Services.Infrastructure
+namespace Westco.Services.Infrastructure.Pipelines.IoC
 {
     internal class RegisterServices : IServicesConfigurator
     {
