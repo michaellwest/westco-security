@@ -90,6 +90,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Westco.Services.Infrastructure, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\scms\app\lib\Westco.Services.Infrastructure.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Security\ChapTokenProvider.cs" />
@@ -104,10 +108,10 @@
     <Compile Include="Security\TokenDelegatingHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Westco.Services.Infrastructure\Westco.Services.Infrastructure.config">
+    <Content Include="App_Config\Include\Westco\Westco.Services.Infrastructure.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="App_Config\Include\Westco.Services.Infrastructure\Westco.zSharedSecret.config.example">
+    <None Include="App_Config\Include\Westco\zWestco.Services.Infrastructure.Settings.config.example">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
