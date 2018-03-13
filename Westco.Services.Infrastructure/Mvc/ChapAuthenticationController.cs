@@ -19,7 +19,7 @@ namespace Westco.Services.Infrastructure.Mvc
         }
 
         [HttpGet]
-        [RequireHttps]
+        //[RequireHttps]
         public ActionResult Challenge()
         {
             var challenge = _tokenProvider.GenerateChallenge();
