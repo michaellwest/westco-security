@@ -46,20 +46,36 @@ function Invoke-SscRequest {
         [string]$Url,
 
         [Parameter(Mandatory=$true)]
-		[string]$SharedSecret,
+	[string]$SharedSecret,
 
         [Parameter(Mandatory=$true)]
         [string]$Challenge,
 
         [string]$Payload,
 
-        [string]$ContentType = "application/json"
+        [string]$ContentType = "application/json",
+
+        [string]$Method = "Post"
     )
 
     $signatureService = New-Object MicroCHAP.SignatureService -ArgumentList $SharedSecret
     $signature = $signatureService.CreateSignature($challenge, $Url, $null)
     $headers = @{ "X-MC-MAC" = $signature.SignatureHash; "X-MC-Nonce" = $challenge; }
-    $result = Invoke-WebRequest -Uri $Url -Headers $headers -Body $Payload -ContentType $ContentType -TimeoutSec 10800 -UseBasicParsing -Method Post
+
+    $requestProps = @{
+        Uri = $Url
+        Headers = $headers
+        ContentType = $ContentType
+        TimeoutSec = 10800
+        UseBasicParsing = $true
+        Method = $Method
+    }
+
+    if($Method -eq "Post") {
+        $requestProps["Body"] = $Payload
+    }
+
+    $result = Invoke-WebRequest @requestProps
 
     $result.Content
 }
